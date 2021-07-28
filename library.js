@@ -9,23 +9,58 @@ book.prototype.info = function(){
 }
 
 let myLibrary = [];
+addBookToLibrary();
 
 function addBookToLibrary(){
-    //do stuff here
+    modalToggle();
+    const addBookButton = document.getElementById('add-book');
+    addBookButton.addEventListener('click', () => {
+        const titleInput = document.getElementById('title-input');
+        const authorInput = document.getElementById('author-input');
+        const pagesInput = document.getElementById('pages-input');
+        const readStatus = document.getElementById('read-status');
+            console.log(titleInput.value, authorInput.value, pagesInput.value, readStatus.checked)
+            let aBook = new book(`${titleInput.value}`,`${authorInput.value}`,`${pagesInput.value}`,`${readStatus.checked}`);
+            myLibrary.push(aBook);
+            clearDisplay();
+            displayBook();
+    })
+
+
+}
+function clearDisplay(){
+    const bookDisplay = document.getElementById('book-display');
+    bookDisplay.innerHTML = '';
+
+}
+
+function modalToggle(){
+    const modalButton = document.getElementById('modal-button');
+    const modalBg = document.querySelector('.modal-bg');
+    const modalClose = document.querySelector('.modal-close');
+
+        modalButton.addEventListener('click', () => {
+            modalBg.classList.add('bg-active');
+        });
+
+        modalClose.addEventListener('click', () => {
+            modalBg.classList.remove('bg-active');
+        });
 }
 
 function displayBook(){
-    //loop through the array and display each 
-    //book on the page.
+    //loop through the array and display each book on the page.
+    for(i=0; i<myLibrary.length;i++){
+        const bookDisplay = document.getElementById('book-display');
+        const div = document.createElement('div');
+        div.id = 'template';
+        div.innerHTML = `${myLibrary[i].title} <br> By ${myLibrary[i].author} <br> ${myLibrary[i].noOfPages} pages <br> <button id='read'>Read</button>`;
+        bookDisplay.appendChild(div);
+    }
 }
 
 
-
-
-
-
-
-        let Hobbit = new book('The Hobbit', 'J.R.R Tolkein', '306', 'not read yet');
-        let theHobbit = new book('Hobbit', 'J.R.R Tolkein', '306', 'not read yet');
-        myLibrary.push(theHobbit,Hobbit);
-            myLibrary.forEach(element => console.table(element));
+    let theHobbit = new book('The Hobbit', 'J.R.R Tolkein', '306', 'not read yet');
+    myLibrary.push(theHobbit);
+        myLibrary.forEach(element => console.table(element));
+    displayBook();

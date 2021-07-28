@@ -5,23 +5,36 @@
             Library
         </title>
             <style>
-            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap');
             </style>
         <link rel="stylesheet" href="style.css">
         <script src="library.js" defer></script>
     </head>
     <body>
-        <header><h1>Your Library </h1></header>
+        <header>
+            <h1>Your Library</h1><h2 id = 'modal-button'>+ Add New Book</h2>
+        </header>
         <div id="container">
             <div id="book-display">
-                <div id="template"></div>
-                <div id="template"></div>
-                <div id="template"></div>
-                <div id="template"></div>
-                <div id="template"></div>
             </div>
             <div id="book-info">
                 <header><h2>Book-info:</h2></header>
+            </div>
+        </div>
+
+        <div class="modal-bg">
+            <div class="modal">
+                <h2>Add a New Book</h2>
+                <label for="title">Book Title:</label>
+                <input type="text" name="title" id="title-input" placeholder="Enter Book Title">
+                <label for="author">Author:</label>
+                <input type="text" name="author" id="author-input" placeholder="Enter Author Name">
+                <label for="pages">No Of Pages:</label>
+                <input type="text" name="pages" id="pages-input" placeholder="Number of pages">
+                <label for="read">Read</label>
+                <input type="checkbox" name="read" id="read-status"  checked>
+                <button type="submit" id= 'add-book'>Add Book</button>
+                <span class="modal-close">X</span>
             </div>
         </div>
     </body>
