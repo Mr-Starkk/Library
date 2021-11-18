@@ -1,24 +1,42 @@
-function book(title,author,noOfPages,readStatus){
+function book(title, author, noOfPages, readStatus) {
     this.title = title,
-    this.author = author,
-    this.noOfPages = noOfPages,
-    this.readStatus = readStatus
-}
-    book.prototype.info = function(){
-        return `${this.title} by ${this.author}, ${this.noOfPages} pages, ${this.readStatus}`
-}
-    book.prototype.readStatusChange = function(){
-        if(this.readStatus == 'true'){
-            this.readStatus = 'false';
-        } else if(this.readStatus == 'false'){
-            this.readStatus = 'true';
-        }
+        this.author = author,
+        this.noOfPages = noOfPages,
+        this.readStatus = readStatus
 }
 
-let myLibrary = [];
+book.prototype.info = function () {
+    return `${this.title} by ${this.author}, ${this.noOfPages} pages, ${this.readStatus}`
+}
+book.prototype.readStatusChange = function () {
+    if (this.readStatus == 'true') {
+        this.readStatus = 'false';
+    } else if (this.readStatus == 'false') {
+        this.readStatus = 'true';
+    }
+
+}
+if (localStorage.length != 0) {
+    myLibrary = JSON.parse(localStorage.getItem('library'));
+    addFunctionality(myLibrary);
+    displayBook();
+} else {
+    window.myLibrary = [];
+    let theHobbit = new book('The Hobbit', 'J.R.R Tolkein', '306', 'true');
+    myLibrary.push(theHobbit);
+    displayBook();
+}
 addBookToLibrary();
 
-function addBookToLibrary(){
+function addFunctionality(array) {
+    for (i = 0; i < array.length; i++) {
+
+        Object.setPrototypeOf(array[i], book.prototype);
+    }
+}
+
+
+function addBookToLibrary() {
     modalToggle();
     const addBookButton = document.getElementById('add-book');
     addBookButton.addEventListener('click', () => {
@@ -26,37 +44,38 @@ function addBookToLibrary(){
         const authorInput = document.getElementById('author-input');
         const pagesInput = document.getElementById('pages-input');
         const readStatus = document.getElementById('read-status');
-            let aBook = new book(`${titleInput.value}`,`${authorInput.value}`,`${pagesInput.value}`,`${readStatus.checked}`);
-            myLibrary.push(aBook);
-            clearDisplay();
-            displayBook();
+        let aBook = new book(`${titleInput.value}`, `${authorInput.value}`, `${pagesInput.value}`, `${readStatus.checked}`);
+        myLibrary.push(aBook);
+        clearDisplay();
+        displayBook();
+        localStorage.setItem('library', JSON.stringify(myLibrary));
     })
 
 
 }
-function clearDisplay(){
+function clearDisplay() {
     const bookDisplay = document.getElementById('book-display');
     bookDisplay.innerHTML = '';
 
 }
 
-function modalToggle(){
+function modalToggle() {
     const modalButton = document.getElementById('modal-button');
     const modalBg = document.querySelector('.modal-bg');
     const modalClose = document.querySelector('.modal-close');
 
-        modalButton.addEventListener('click', () => {
-            modalBg.classList.add('bg-active');
-        });
+    modalButton.addEventListener('click', () => {
+        modalBg.classList.add('bg-active');
+    });
 
-        modalClose.addEventListener('click', () => {
-            modalBg.classList.remove('bg-active');
-        });
+    modalClose.addEventListener('click', () => {
+        modalBg.classList.remove('bg-active');
+    });
 }
 
-function displayBook(){
+function displayBook() {
     //loop through the array and display each book on the page.
-    for(i=0; i<myLibrary.length;i++){
+    for (i = 0; i < myLibrary.length; i++) {
         const bookDisplay = document.getElementById('book-display');
         const div = document.createElement('div');
         div.id = 'bookDiv';
@@ -66,68 +85,68 @@ function displayBook(){
         let readButton = document.createElement('button');
         let bookDivClose = document.createElement('span');
 
-            bookDivClose.classList.add('bookDiv-close');
-            bookDivClose.textContent = 'X';
-            readButton.id = 'read'; 
-            titleDiv.textContent = `${myLibrary[i].title}`;
-            authorDiv.textContent = `${myLibrary[i].author}`;
-            pagesDiv.textContent = `${myLibrary[i].noOfPages} pages`;
-            function readButtonStatus(){
-                if(myLibrary[i].readStatus == 'true'){
-                    return 'Read'
-                }else {return 'Not Read Yet'};
-            }
-            readButton.textContent =  readButtonStatus();
-            
-            div.appendChild(titleDiv);
-            div.appendChild(authorDiv);
-            div.appendChild(pagesDiv);
-            div.appendChild(readButton);
-            div.appendChild(bookDivClose);
+        bookDivClose.classList.add('bookDiv-close');
+        bookDivClose.textContent = 'X';
+        readButton.id = 'read';
+        titleDiv.textContent = `${myLibrary[i].title}`;
+        authorDiv.textContent = `${myLibrary[i].author}`;
+        pagesDiv.textContent = `${myLibrary[i].noOfPages} pages`;
+        function readButtonStatus() {
+            if (myLibrary[i].readStatus == 'true') {
+                return 'Read'
+            } else { return 'Not Read Yet' };
+        }
+        readButton.textContent = readButtonStatus();
+
+        div.appendChild(titleDiv);
+        div.appendChild(authorDiv);
+        div.appendChild(pagesDiv);
+        div.appendChild(readButton);
+        div.appendChild(bookDivClose);
 
         bookDisplay.appendChild(div);
 
         readButton.addEventListener('click', (e) => {
             let bookName = e.target.parentNode.firstChild.textContent;
-             for(i=0; i<myLibrary.length; i++){
-                if(bookName == myLibrary[i].title){
+            for (i = 0; i < myLibrary.length; i++) {
+                if (bookName == myLibrary[i].title) {
+                    console.log(myLibrary);
                     myLibrary[i].readStatusChange();
                 }
-             }
-            if(readButton.textContent == 'Read'){
+            }
+            if (readButton.textContent == 'Read') {
                 readButton.textContent = 'Not Read Yet';
-            } else if(readButton.textContent == 'Not Read Yet'){
+            } else if (readButton.textContent == 'Not Read Yet') {
                 readButton.textContent = 'Read';
             }
         })
 
         bookDivClose.addEventListener('click', (e) => {
             let bookName = e.target.parentNode.firstChild.textContent;
-             for(i=0; i<myLibrary.length; i++){
-                if(bookName == myLibrary[i].title){
-                    myLibrary.splice(i,1);
+            for (i = 0; i < myLibrary.length; i++) {
+                if (bookName == myLibrary[i].title) {
+                    myLibrary.splice(i, 1);
                 }
-             }
-             clearDisplay();
-             displayBook();
+            }
+            clearDisplay();
+            displayBook();
+            localStorage.setItem('library', JSON.stringify(myLibrary));
         })
 
         // div.addEventListener('mouseover', (e) => {
         //     const bookInfo = document.getElementById('book-info');
-        //     // let bookInfoTitle = `${myLibrary[i].title}`;
+        //     let para = document.createElement("p");
+        //     para.textContent = `${e.target.parentNode.firstChild.textContent}`;
         //     // let bookInfoAuthor = `${myLibrary[i].author}`;
         //     // let bookInfoPages = `${myLibrary[i].noOfPages} pages`;
-        //         console.log(e.target.parentNode)
-        //         // bookInfo.appendChild(bookInfoTitle);
-        //         // bookInfo.appendChild(bookInfoAuthor);
-        //         // bookInfo.appendChild(bookInfoPages);
+        //     console.log(e.target.parentNode)
+        //     bookInfo.appendChild(para);
+        //     // bookInfo.appendChild(bookInfoAuthor);
+        //     // bookInfo.appendChild(bookInfoPages);
         // })
     }
 }
 
 
-    let theHobbit = new book('The Hobbit', 'J.R.R Tolkein', '306', 'true');
-    myLibrary.push(theHobbit);
-    displayBook();
 
-    
+
