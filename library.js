@@ -1,20 +1,22 @@
-function book(title, author, noOfPages, readStatus) {
-    this.title = title,
-        this.author = author,
-        this.noOfPages = noOfPages,
-        this.readStatus = readStatus
-}
-
-book.prototype.info = function () {
-    return `${this.title} by ${this.author}, ${this.noOfPages} pages, ${this.readStatus}`
-}
-book.prototype.readStatusChange = function () {
-    if (this.readStatus == 'true') {
-        this.readStatus = 'false';
-    } else if (this.readStatus == 'false') {
-        this.readStatus = 'true';
+class book {
+    constructor(title, author, noOfPages, readStatus) {
+        this.title = title,
+            this.author = author,
+            this.noOfPages = noOfPages,
+            this.readStatus = readStatus
     }
 
+    info = function () {
+        return `${this.title} by ${this.author}, ${this.noOfPages} pages, ${this.readStatus}`
+    }
+    readStatusChange = function () {
+        if (this.readStatus == 'true') {
+            this.readStatus = 'false';
+        } else if (this.readStatus == 'false') {
+            this.readStatus = 'true';
+        }
+
+    }
 }
 if (localStorage.length != 0) {
     myLibrary = JSON.parse(localStorage.getItem('library'));
